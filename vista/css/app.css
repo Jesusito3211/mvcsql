@@ -1,0 +1,26 @@
+body {
+  background: #f0f0f0;
+  font-family: Arial;
+}
+.panel {
+  background: white;
+  margin: 0 auto;
+  width: 800px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+table {
+  width: 100%;
+  border: 1px solid #ddd;
+}
+th {
+  background: #e6e6e6;
+  color: rgb(128, 0, 0);
+  text-align: center;
+}
+a {
+  color: green;
+  text-decoration: none;
+  padding: 3px 6px;
+  border: 1px solid #c1c1c1;
+}
