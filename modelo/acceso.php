@@ -1,15 +1,9 @@
 <?php
-class Acceso {
-    private $db;
 
+class Acceso extends Modelo {
     public function __construct() {
-        try {
-            $this->db = new PDO('mysql:host=localhost;dbname=mvc', 'root', '');
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            $this->registrarError("Error de conexión: " . $e->getMessage());
-            die("No se pudo conectar a la base de datos.");
-        }
+        // Llama al constructor del padre (Modelo) para establecer la conexión a la BD
+        parent::__construct();
     }
 
     public function validarUsuario($correo, $clave) {
@@ -26,13 +20,24 @@ class Acceso {
 
     public function registrarUsuario($correo, $clave) {
         try {
-            $sql = "INSERT INTO usuarios (correo, clave) VALUES (?, MD5(?))";
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$correo, $clave]);
-            return true;
+            // 1. Verificar si el correo ya existe
+            $sql_verificar = "SELECT * FROM usuarios WHERE correo = ?";
+            $stmt_verificar = $this->db->prepare($sql_verificar);
+            $stmt_verificar->execute([$correo]);
+
+            if ($stmt_verificar->fetch()) {
+                return "existe"; // El correo ya está registrado
+            }
+
+            // 2. Si no existe, insertar nuevo usuario
+            $sql_insertar = "INSERT INTO usuarios (correo, clave) VALUES (?, MD5(?))";
+            $stmt_insertar = $this->db->prepare($sql_insertar);
+            $stmt_insertar->execute([$correo, $clave]);
+
+            return "ok"; // Registro exitoso
         } catch (PDOException $e) {
             $this->registrarError("Error al registrar usuario ($correo): " . $e->getMessage());
-            return false;
+            return "error"; // Error en el registro
         }
     }
 

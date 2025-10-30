@@ -1,6 +1,6 @@
 <?php
 class Modelo {
-    private $db;
+    protected $db;
     private $personas;
 
     public function __construct() {
